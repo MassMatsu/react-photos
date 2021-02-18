@@ -157,6 +157,7 @@ Stock Photos
   margin: 0 auto;
 }
 .search-form {
+  /* margin: 0 auto; */
   display: flex;
 }
 .form-input {

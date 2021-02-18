@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import Photo from './Photo';
+
+const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`;
+const mainUrl = `https://api.unsplash.com/photos/`;
 
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
+
+  const fetchPhotos = async () => {
+    const response = await fetch(`${mainUrl}${clientID}`);
+    const data = await response.json();
+
+    console.log(data);
+    setPhotos(data);
+  };
+
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
 
   return (
     <main>
@@ -20,11 +36,9 @@ export default function App() {
         </form>
         <section className='photos'>
           <section className='photos-center'>
-            {
-              <article className='photo'>
-                <div className='photo-info'></div>
-              </article>
-            }
+            {photos.map((photo, index) => {
+              return <Photo key={index} {...photo} />;
+            })}
           </section>
         </section>
       </section>
