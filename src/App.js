@@ -10,38 +10,72 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
 
   const fetchPhotos = async () => {
+    setLoading(true);
+
     let url;
     const urlQuery = `&query=${searchTerm}`;
-    if (searchTerm) {
-      url = `${searchUrl}${clientID}${urlQuery}`;
-    } else {
-      url = `${mainUrl}${clientID}`;
-    }
-
-    setLoading(true);
-    const response = await fetch(url);
-    const data = await response.json();
+    const urlPage = `&page=${page}`; // page number to retrive (which page to retrive?)
 
     if (searchTerm) {
-      setPhotos(data.results);
+      url = `${searchUrl}${clientID}${urlQuery}${urlPage}`;
     } else {
-      setPhotos(data);
+      url = `${mainUrl}${clientID}${urlPage}`;
     }
-    console.log(data);
 
-    setLoading(false);
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      // different data type will be returned depending on api url, so set conditions to accomodate it.
+      setPhotos((oldPhotos) => {
+        if (searchTerm && page === 1) {
+          return data.results; // set photos to the first page, not including the default page
+        } else if (searchTerm) {
+          return [...oldPhotos, ...data.results];
+        } else if (page === 1) {
+          return data;
+        } else {
+          return [...oldPhotos, ...data]; // keep adding on the photos from previous pages
+        }
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log('unable to fetch the photos');
+      setLoading(false);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchPhotos();
-    console.log(searchTerm);
+    if (page === 1) {
+      fetchPhotos();
+    } else {
+      setPage(1);
+    }
   };
 
   useEffect(() => {
     fetchPhotos();
+  }, [page]);
+
+  useEffect(() => {
+    const event = window.addEventListener('scroll', () => {
+      // put "!loading" to the condition, for stopping to invoke setPage while loading. After it's loaded document.body.scrollHeight would be much higher by adding another page long, so the condition would be false to invoke setPage!
+      if (
+        (!loading && window.innerHeight + window.scrollY) >
+        document.body.scrollHeight - 2
+      ) {
+        setPage((oldPage) => {
+          return oldPage + 1;
+        });
+        console.log('end of page');
+      }
+    });
+    return () => window.removeEventListener('scroll', event);
   }, []);
 
   return (
@@ -55,20 +89,22 @@ export default function App() {
           <input
             type='text'
             className='form-input'
-            placeholder='search'
+            placeholder='keyword to explore photos'
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className='submit-btn'>
             <FaSearch />
           </button>
         </form>
-        <section className='photos'>
-          <section className='photos-center'>
-            {photos.map((photo, index) => {
-              return <Photo key={index} {...photo} />;
-            })}
-          </section>
-        </section>
+      </section>
+
+      <section className='photos'>
+        <div className='photos-center'>
+          {photos.map((photo, index) => {
+            return <Photo key={index} {...photo} />;
+          })}
+        </div>
+        {loading && <h2 className='loading'>loading...</h2>}
       </section>
     </main>
   );
