@@ -60,6 +60,7 @@ export default function App() {
 
   useEffect(() => {
     fetchPhotos();
+    // eslint-disable-next-line
   }, [page]);
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export default function App() {
       }
     });
     return () => window.removeEventListener('scroll', event);
+    // eslint-disable-next-line
   }, []);
 
   return (
