@@ -4,17 +4,40 @@ import Photo from './Photo';
 
 const clientID = `?client_id=${process.env.REACT_APP_ACCESS_KEY}`;
 const mainUrl = `https://api.unsplash.com/photos/`;
+const searchUrl = `https://api.unsplash.com/search/photos/`;
 
 export default function App() {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchPhotos = async () => {
-    const response = await fetch(`${mainUrl}${clientID}`);
+    let url;
+    const urlQuery = `&query=${searchTerm}`;
+    if (searchTerm) {
+      url = `${searchUrl}${clientID}${urlQuery}`;
+    } else {
+      url = `${mainUrl}${clientID}`;
+    }
+
+    setLoading(true);
+    const response = await fetch(url);
     const data = await response.json();
 
+    if (searchTerm) {
+      setPhotos(data.results);
+    } else {
+      setPhotos(data);
+    }
     console.log(data);
-    setPhotos(data);
+
+    setLoading(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchPhotos();
+    console.log(searchTerm);
   };
 
   useEffect(() => {
@@ -28,8 +51,13 @@ export default function App() {
         <div className='underline'></div>
       </section>
       <section className='search'>
-        <form className='search-form'>
-          <input type='text' className='form-input' placeholder='search' />
+        <form className='search-form' onSubmit={handleSubmit}>
+          <input
+            type='text'
+            className='form-input'
+            placeholder='search'
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <button className='submit-btn'>
             <FaSearch />
           </button>
