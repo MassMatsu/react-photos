@@ -138,10 +138,14 @@ p {
 Stock Photos
 ===============
 */
+.banner {
+  background: url('./ph.jpg') no-repeat center/cover;
+}
 .section-title {
   text-align: center;
-  margin: 4rem 0 4rem 0;
-  color: var(--clr-grey-5);
+  padding-top: 4rem;
+  margin: 0 0 4rem 0;
+  color: var(--clr-grey-10);
   letter-spacing: var(--spacing);
   font-size: 2.5rem;
 }
@@ -157,11 +161,16 @@ Stock Photos
   margin: 0 auto;
 }
 .search-form {
-  /* margin: 0 auto; */
+  margin: 0 auto;
   display: flex;
+  padding-bottom: 3rem;
 }
 .form-input {
   width: 100%;
+}
+.form-input:hover {
+  cursor: pointer;
+  border: 3px solid var(--clr-red-light);
 }
 .form-input,
 .submit-btn {
@@ -171,14 +180,21 @@ Stock Photos
   letter-spacing: var(--spacing);
   font-size: 1.5rem;
   background: transparent;
-  color: var(--clr-grey-5);
-  border-bottom: 3px solid var(--clr-grey-5);
+  color: var(--clr-grey-10);
+  border-bottom: 3px solid var(--clr-grey-10);
 }
 .form-input {
-  color: var(--clr-grey-3);
+  color: var(--clr-grey-10);
+}
+.form-input:focus {
+  border: 3px solid var(--clr-red-light);
+  outline: none;
 }
 .form-input::placeholder {
-  color: var(--clr-grey-5);
+  color: var(--clr-grey-10);
+}
+.search-icon:hover {
+  cursor: pointer;
 }
 .photos {
   padding: 5rem 0;

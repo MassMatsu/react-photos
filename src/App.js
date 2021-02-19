@@ -80,22 +80,24 @@ export default function App() {
 
   return (
     <main>
-      <section className='section-title'>
-        <p>exploring photos</p>
-        <div className='underline'></div>
-      </section>
-      <section className='search'>
-        <form className='search-form' onSubmit={handleSubmit}>
-          <input
-            type='text'
-            className='form-input'
-            placeholder='keyword to explore photos'
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button className='submit-btn'>
-            <FaSearch />
-          </button>
-        </form>
+      <section className='banner'>
+        <section className='section-title'>
+          <p>exploring photos</p>
+          <div className='underline'></div>
+        </section>
+        <section className='search'>
+          <form className='search-form' onSubmit={handleSubmit}>
+            <input
+              type='text'
+              className='form-input'
+              placeholder='keyword to explore photos'
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className='submit-btn'>
+              <FaSearch className='search-icon' />
+            </button>
+          </form>
+        </section>
       </section>
 
       <section className='photos'>
