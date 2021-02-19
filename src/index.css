@@ -170,7 +170,6 @@ Stock Photos
 }
 .form-input:hover {
   cursor: pointer;
-  border: 3px solid var(--clr-red-light);
 }
 .form-input,
 .submit-btn {
