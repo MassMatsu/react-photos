@@ -139,7 +139,7 @@ Stock Photos
 ===============
 */
 .banner {
-  background: url('./ph.jpg') no-repeat center/cover;
+  background: url('/images/ph.jpg') no-repeat center/cover;
 }
 .section-title {
   text-align: center;
